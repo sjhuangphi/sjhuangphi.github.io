@@ -1,80 +1,46 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <title>Zalo 登入測試</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      max-width: 600px;
-      margin: auto;
-    }
-    label, input, button {
-      display: block;
-      margin: 12px 0;
-    }
-    input {
-      padding: 8px;
-      font-size: 16px;
-      width: 100%;
-    }
-    button {
-      padding: 10px;
-      font-size: 16px;
-      background-color: #0068ff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0052cc;
-    }
-    .code-box {
-      margin-top: 24px;
-      background: #f5f5f5;
-      padding: 12px;
-      border-radius: 6px;
-      word-break: break-all;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label { display: block; margin-top: 10px; }
+    input { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 20px; }
+    .code-box { margin-top: 20px; color: green; font-weight: bold; }
   </style>
 </head>
 <body>
 
-<h1>Zalo 登入測試</h1>
+<h1>Zalo OAuth 登入測試</h1>
 
-<label for="appId">Zalo App ID：</label>
-<input type="text" id="appId" placeholder="請輸入 App ID" value="4378367415197738750" />
+<label>App ID</label>
+<input type="text" id="appIdInput" value="4378367415197738750">
 
-<button onclick="loginWithZalo()">使用 Zalo 登入</button>
+<label>Redirect URI</label>
+<input type="text" id="redirectUriInput" value="https://sjhuangphi.github.io">
 
-<div id="codeContainer" class="code-box" style="display: none;">
-  <strong>收到的授權碼 (code)：</strong>
-  <div id="codeValue"></div>
-</div>
+<button onclick="redirectToZalo()">登入 Zalo</button>
+
+<div class="code-box" id="codeBox"></div>
 
 <script>
-  // 點擊登入按鈕時導向 Zalo 登入授權
-  function loginWithZalo() {
-    const appId = document.getElementById("appId").value.trim();
-    const redirectUri = encodeURIComponent(window.location.href.split('?')[0]);
-    const zaloLoginUrl = `https://oauth.zaloapp.com/v4/permission?app_id=${appId}&redirect_uri=${redirectUri}`;
-
-    window.location.href = zaloLoginUrl;
+  // 檢查 URL 是否有 ?code=xxx
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+  if (code) {
+    document.getElementById('codeBox').textContent = "回傳的 code: " + code;
   }
 
-  // 檢查 URL 是否有 code，若有就顯示
-  window.onload = function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-
-    if (code) {
-      document.getElementById("codeContainer").style.display = "block";
-      document.getElementById("codeValue").innerText = code;
-    }
-  };
+  // 點擊登入時轉向 Zalo 授權頁
+  function redirectToZalo() {
+    const appId = document.getElementById('appIdInput').value;
+    const redirectUri = encodeURIComponent(document.getElementById('redirectUriInput').value);
+    const zaloUrl = `https://oauth.zaloapp.com/v4/permission?app_id=${appId}&redirect_uri=${redirectUri}`;
+    window.location.href = zaloUrl;
+  }
 </script>
 
 </body>
