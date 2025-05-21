@@ -34,11 +34,24 @@
     document.getElementById('codeBox').textContent = "回傳的 code: " + code;
   }
 
-  // 點擊登入時轉向 Zalo 授權頁
+  // 產生隨機 state 字串
+  function generateState(length = 16) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for(let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
+  // 點擊登入時轉向 Zalo 授權頁，帶上 state 參數
   function redirectToZalo() {
     const appId = document.getElementById('appIdInput').value;
     const redirectUri = encodeURIComponent(document.getElementById('redirectUriInput').value);
-    const zaloUrl = `https://oauth.zaloapp.com/v4/permission?app_id=${appId}&redirect_uri=${redirectUri}`;
+    const state = generateState();
+    // 你可以考慮把 state 存到 localStorage 或 sessionStorage，之後驗證用
+    sessionStorage.setItem('oauth_state', state);
+    const zaloUrl = `https://oauth.zaloapp.com/v4/permission?app_id=${appId}&redirect_uri=${redirectUri}&state=${state}`;
     window.location.href = zaloUrl;
   }
 </script>
