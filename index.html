@@ -19,7 +19,7 @@
       border-radius: 8px;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
       width: 100%;
-      max-width: 600px;
+      max-width: 900px;
     }
 
     h1 {
@@ -45,7 +45,7 @@
       margin-top: 20px;
       padding: 10px 25px;
       font-size: 16px;
-      background-color: blue;
+      background-color: #0a0ae5;
       color: white;
       border: none;
       border-radius: 5px;
@@ -53,16 +53,27 @@
     }
 
     button:hover {
-      background-color: #05a749;
+      background-color: blue;
     }
 
+    /*.code-box {*/
+    /*  margin-top: 30px;*/
+    /*  background-color: #f1f1f1;*/
+    /*  padding: 15px;*/
+    /*  border-radius: 5px;*/
+    /*  color: #333;*/
+    /*}*/
+
     .code-box {
-      margin-top: 30px;
-      background-color: #f1f1f1;
-      padding: 15px;
-      border-radius: 5px;
-      color: #333;
+      max-width: 100%;       /* 限制最大寬度不超過父元素 */
+      overflow-x: auto;     /* 當內容超出寬度時出現水平滾動條 */
+      white-space: nowrap;  /* 讓內容不換行 */
+      border: 1px solid #ccc; /* 可選，方便看到邊框 */
+      padding: 8px;           /* 可選，讓內容不貼邊 */
+      background-color: #f9f9f9; /* 可選，底色方便辨識 */
+      font-family: monospace; /* 程式碼常用等寬字型 */
     }
+
 
   </style>
 </head>
