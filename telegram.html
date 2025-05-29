@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Telegram 登入頁面</title>
+</head>
+<body>
+<h2>請使用 Telegram 登入</h2>
+
+<!-- Telegram Login Button -->
+<script async src="https://telegram.org/js/telegram-widget.js?7"
+        data-telegram-login="chris0116TestBot"
+        data-size="large"
+        data-userpic="false"
+        data-radius="10"
+        data-request-access="write"
+        data-userpic="false"
+        data-on-auth="onTelegramAuth(user)">
+</script>
+
+<script>
+  function onTelegramAuth(user) {
+    console.log("Telegram 使用者資料：", user);
+    // 你可以在這裡發送 user 資料到你的伺服器
+    alert(`你好，${user.first_name}！你的 Telegram ID 是 ${user.id}`);
+  }
+</script>
+</body>
+</html>
