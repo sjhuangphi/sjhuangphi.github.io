@@ -1,30 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Telegram 登入頁面1111</title>
+  <meta charset="UTF-8">
+  <title>AVIF 圖片測試</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      display: block;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-<h2>請使用 Telegram 登入</h2>
+<h1>AVIF 圖片測試</h1>
 
-<!-- Telegram Login Button -->
-<script async src="https://telegram.org/js/telegram-widget.js?7"
-        data-telegram-login="chris0116TestBot"
-        data-size="large"
-        data-userpic="false"
-        data-radius="10"
-        data-request-access="write"
-        data-userpic="false"
-        data-on-auth="onTelegramAuth(user)">
-</script>
+<!-- 單純載入 AVIF -->
+<img
+        src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.avif"
+        alt="AVIF 測試圖片"
+        width="1200" height="800">
 
-<script>
-  function onTelegramAuth(user) {
-    console.log("Telegram 使用者資料：", user);
-    // 你可以在這裡發送 user 資料到你的伺服器
-    alert(`你好，${user.first_name}！你的 Telegram ID 是 ${user.id}`);
-  }
-</script>
+<!-- 使用 picture 提供後備格式 -->
+<picture>
+  <source srcset="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.avif" type="image/avif">
+  <source srcset="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.webp" type="image/webp">
+  <img
+          src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.jpg"
+          alt="圖片後備格式"
+          width="1200" height="800">
+</picture>
+
 </body>
 </html>
