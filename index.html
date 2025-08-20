@@ -2,39 +2,68 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>AVIF 圖片測試</title>
+  <title>多格式圖片並排展示</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-    img {
+    h2 {
+      margin-top: 40px;
+    }
+    .group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .item {
+      flex: 1 1 30%;
+      text-align: center;
+    }
+    .item img {
       max-width: 100%;
       border-radius: 12px;
       display: block;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-<h1>AVIF 圖片測試</h1>
+<h1>多格式圖片展示 (AVIF / WebP / PNG / JPEG)</h1>
 
-<!-- 單純載入 AVIF -->
-<img
-        src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.avif"
-        alt="AVIF 測試圖片"
-        width="1200" height="800">
+<h2>📌 PNG 主檔 (三個格式並列)</h2>
+<div class="group">
+  <div class="item">
+    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.avif" alt="PNG - AVIF 版本">
+    <p>AVIF</p>
+  </div>
+  <div class="item">
+    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.webp" alt="PNG - WebP 版本">
+    <p>WebP</p>
+  </div>
+  <div class="item">
+    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.png" alt="PNG 原始檔">
+    <p>PNG</p>
+  </div>
+</div>
 
-<!-- 使用 picture 提供後備格式 -->
-<picture>
-  <source srcset="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.avif" type="image/avif">
-  <source srcset="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.webp" type="image/webp">
-  <img
-          src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.jpg"
-          alt="圖片後備格式"
-          width="1200" height="800">
-</picture>
+<h2>📌 JPEG 主檔 (三個格式並列)</h2>
+<div class="group">
+  <div class="item">
+    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820115536.avif" alt="JPEG - AVIF 版本">
+    <p>AVIF</p>
+  </div>
+  <div class="item">
+    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820115536.webp" alt="JPEG - WebP 版本">
+    <p>WebP</p>
+  </div>
+  <div class="item">
+    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820115536.jpeg" alt="JPEG 原始檔">
+    <p>JPEG</p>
+  </div>
+</div>
 
 </body>
 </html>
