@@ -1,69 +1,90 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>多格式圖片並排展示</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>極驗設備指紋測試</title>
+  <!-- 引入極驗設備指紋 SDK -->
+  <script src="https://static.geetest.com/g5/gd.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
       padding: 20px;
     }
-    h2 {
-      margin-top: 40px;
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      white-space: pre-wrap;
+      font-family: monospace;
     }
-    .group {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
-    .item {
-      flex: 1 1 30%;
-      text-align: center;
-    }
-    .item img {
-      max-width: 100%;
-      border-radius: 12px;
-      display: block;
-      margin-bottom: 10px;
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-<h1>多格式圖片展示 (AVIF / WebP / PNG / JPEG)</h1>
+<h1>極驗設備指紋測試</h1>
+<form id="geetest-form">
+  <label for="user_id">APP Id:</label>
+  <input type="text" id="app_id" value="pfjyp2ksljcwirvxarassaztbigvd4gp"><br><br>
+  <label for="user_id">appId:</label>
+  <input type="text" id="user_id" value="11500066894"><br><br>
+  <label for="user_ip">用戶 IP:</label>
+  <input type="text" id="user_ip" value="117.136.52.227"><br><br>
+  <label for="scene">業務場景:</label>
+  <select id="scene">
+    <option value="login">登錄</option>
+    <option value="sign_up">註冊</option>
+    <option value="activity" selected>活動</option>
+  </select><br><br>
+  <button type="submit">生成設備指紋</button>
+</form>
+<div id="result">結果將顯示在這裡...</div>
 
-<h2>📌 PNG 主檔 (三個格式並列)</h2>
-<div class="group">
-  <div class="item">
-    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.avif" alt="PNG - AVIF 版本">
-    <p>AVIF</p>
-  </div>
-  <div class="item">
-    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.webp" alt="PNG - WebP 版本">
-    <p>WebP</p>
-  </div>
-  <div class="item">
-    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820114635.png" alt="PNG 原始檔">
-    <p>PNG</p>
-  </div>
-</div>
+<script>
+  // 表單提交事件
+  document.getElementById("geetest-form").addEventListener("submit", function(event) {
+    event.preventDefault();
 
-<h2>📌 JPEG 主檔 (三個格式並列)</h2>
-<div class="group">
-  <div class="item">
-    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820115536.avif" alt="JPEG - AVIF 版本">
-    <p>AVIF</p>
-  </div>
-  <div class="item">
-    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820115536.webp" alt="JPEG - WebP 版本">
-    <p>WebP</p>
-  </div>
-  <div class="item">
-    <img src="https://images.21947392.com/wsd-images-dev/2000cai/seo_template/large/wps_v2_20250820115536.jpeg" alt="JPEG 原始檔">
-    <p>JPEG</p>
-  </div>
-</div>
-
+    // 初始化極驗設備指紋 SDK
+    initGeeGuard({
+      appId: document.getElementById("app_id").value, // 替換為從極驗後台獲取的 appId
+      protocol: "https://",
+      networkTimeout: 10000
+    }, function(data) {
+      const resultDiv = document.getElementById("result");
+      if (data.status === "success") {
+        // 構造 JSON 數據
+        const requestData = {
+          geeToken: data.data.gee_token,
+          userIp: document.getElementById("user_ip").value,
+          userId: document.getElementById("user_id").value,
+          userIdType: 1, // 假設為手機號
+          opTimestamp: Math.floor(Date.now() / 1000),
+          scene: document.getElementById("scene").value
+        };
+        // 顯示 JSON
+        resultDiv.textContent = JSON.stringify(requestData, null, 2);
+      } else {
+        // 顯示錯誤
+        resultDiv.textContent = JSON.stringify({
+          status: "error",
+          message: data.data.msg,
+          code: data.data.code
+        }, null, 2);
+      }
+    });
+  });
+</script>
 </body>
 </html>
