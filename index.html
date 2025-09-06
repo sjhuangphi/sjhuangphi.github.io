@@ -2,77 +2,86 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>極驗設備指紋測試</title>
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <!-- 引入極驗設備指紋 SDK -->
   <script src="https://static.geetest.com/g5/gd.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    #result {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      background-color: #f9f9f9;
-      white-space: pre-wrap;
-      font-family: monospace;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
 </head>
-<body>
-<h1>極驗設備指紋測試</h1>
-<form id="geetest-form">
-  <label for="user_id">APP Id:</label>
-  <input type="text" id="app_id" value="pfjyp2ksljcwirvxarassaztbigvd4gp"><br><br>
-  <label for="user_id">用戶 ID（手機號:</label>
-  <input type="text" id="user_id" value="11500066894"><br><br>
-  <label for="user_ip">用戶 IP:</label>
-  <input type="text" id="user_ip" value="117.136.52.227"><br><br>
-  <label for="scene">業務場景:</label>
-  <select id="scene">
-    <option value="login">登錄</option>
-    <option value="sign_up">註冊</option>
-    <option value="activity" selected>活動</option>
-  </select><br><br>
-  <button type="submit">生成設備指紋</button>
-</form>
-<div id="result">結果將顯示在這裡...</div>
+<body class="bg-gray-100 font-sans">
+<div class="max-w-2xl mx-auto p-6">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">極驗設備指紋測試</h1>
+  <form id="geetest-form" class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-4">
+      <label for="app_id" class="block text-sm font-medium text-gray-700">Geetest App ID</label>
+      <input type="text" id="app_id" value="pfjyp2ksljcwirvxarassaztbigvd4gp" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+    </div>
+    <div class="mb-4">
+      <label for="user_ip" class="block text-sm font-medium text-gray-700">用戶 IP（IPv4，如 117.136.52.227）</label>
+      <input type="text" id="user_ip" value="117.136.52.227" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+      <p class="text-sm text-gray-500 mt-1">請輸入有效的 IPv4 地址</p>
+    </div>
+    <div class="mb-4">
+      <label for="scene" class="block text-sm font-medium text-gray-700">業務場景</label>
+      <select id="scene" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+        <option value="login">登錄</option>
+        <option value="sign_up">註冊</option>
+        <option value="activity" selected>活動</option>
+      </select>
+    </div>
+    <div class="mb-4">
+      <label class="flex items-center">
+        <input type="checkbox" id="include_user_id" class="mr-2">
+        <span class="text-sm font-medium text-gray-700">提供用戶 ID 和類型（選填）</span>
+      </label>
+    </div>
+    <div id="user_id_fields" class="hidden mb-4">
+      <label for="user_id" class="block text-sm font-medium text-gray-700">用戶 ID（如手機號）</label>
+      <input type="text" id="user_id" value="11500066894" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+      <label for="user_id_type" class="block text-sm font-medium text-gray-700 mt-2">用戶標識類型（2=手機號，102=MD5手機號，3=QQ OpenID，4=Wechat OpenID）</label>
+      <input type="number" id="user_id_type" value="2" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <button type="submit" class="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700">生成設備指紋</button>
+  </form>
+  <div id="result" class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md font-mono text-sm">
+    結果將顯示在這裡...
+  </div>
+</div>
 
 <script>
+  // 控制 user_id 和 user_id_type 字段顯示
+  document.getElementById("include_user_id").addEventListener("change", function() {
+    document.getElementById("user_id_fields").classList.toggle("hidden", !this.checked);
+  });
+
   // 表單提交事件
   document.getElementById("geetest-form").addEventListener("submit", function(event) {
     event.preventDefault();
+    const resultDiv = document.getElementById("result");
+    resultDiv.textContent = "正在生成設備指紋...";
 
     // 初始化極驗設備指紋 SDK
     initGeeGuard({
-      appId: document.getElementById("app_id").value, // 替換為從極驗後台獲取的 appId
+      appId: document.getElementById("app_id").value,
       protocol: "https://",
       networkTimeout: 10000
     }, function(data) {
-      const resultDiv = document.getElementById("result");
       if (data.status === "success") {
         // 構造 JSON 數據
         const requestData = {
           geeToken: data.data.gee_token,
           userIp: document.getElementById("user_ip").value,
-          userId: document.getElementById("user_id").value,
-          userIdType: 1, // 假設為手機號
           opTimestamp: Math.floor(Date.now() / 1000),
           scene: document.getElementById("scene").value
         };
+
+        // 如果勾選了提供用戶 ID，添加 userId 和 userIdType
+        if (document.getElementById("include_user_id").checked) {
+          requestData.userId = document.getElementById("user_id").value;
+          requestData.userIdType = parseInt(document.getElementById("user_id_type").value);
+        }
+
         // 顯示 JSON
         resultDiv.textContent = JSON.stringify(requestData, null, 2);
       } else {
