@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Particle Network — Facebook Login 範例</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans CJK TC", "Helvetica Neue", Arial; padding: 32px; background:#f7f8fb; }
+    .card { background:white; padding:24px; border-radius:12px; box-shadow:0 6px 20px rgba(20,20,40,0.06); max-width:720px; margin:auto }
+    button { padding:10px 16px; border-radius:8px; border:0; cursor:pointer; }
+    .btn-primary { background:#1877F2; color:white; }
+    pre { background:#f0f2f5; padding:12px; border-radius:8px; overflow:auto }
+    .info { margin-top:12px; }
+  </style>
+  <!-- Particle Auth (browser build) -->
+  <script src="https://static.particle.network/sdks/web/auth/1.2.1/auth.min.js"></script>
+  <!-- Optional: Particle provider (EVM support) -->
+  <script src="https://static.particle.network/sdks/web/provider/1.2.0/provider.min.js"></script>
+  <!-- Web3.js (用來示範取得 accounts，可用 ethers 替換) -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+</head>
+<body>
+<div class="card">
+  <h2>Particle Network — Facebook 登入（範例）</h2>
+  <p>按下面按鈕使用 Facebook 登入，登入成功後會顯示 user info 與對應的公鑰（若 Particle 已建立 wallet）。</p>
+
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <button id="fb-login" class="btn-primary">使用 Facebook 登入</button>
+    <button id="logout" style="background:#efefef">登出</button>
+    <button id="get-accounts" style="background:#e6f7ff">取得 Accounts (web3)</button>
+  </div>
+
+  <div class="info">
+    <h4>執行紀錄 / 使用者資訊</h4>
+    <pre id="log">尚未登入</pre>
+  </div>
+</div>
+
+<script>
+  // ---------- 重要：把下面改為你自己的值 ----------
+  const PARTICLE_PROJECT_ID = '2ca21ebc-dcca-4561-a2c5-bc9d3186f6fc';
+  const PARTICLE_CLIENT_KEY = 'cr6hWHl0ZSi5QErNDelpSpuTYKORNDEouybUDEuE';
+  const PARTICLE_APP_ID = '8ec2b7f4-18b7-435c-a703-c7a484959664';
+  // --------------------------------------------------
+
+  let particle = null;
+  let particleProvider = null; // EIP-1193 provider (ParticleProvider)
+  let web3 = null;
+
+  function log(msg) {
+    const el = document.getElementById('log');
+    const now = new Date().toISOString();
+    el.textContent = `${now} — ${msg}\n\n` + el.textContent;
+  }
+
+  (function initParticle() {
+    // auth.min.js 會把 ParticleNetwork 放到全域
+    if (typeof ParticleNetwork === 'undefined') {
+      log('錯誤：找不到 ParticleNetwork，請確認 SDK 已載入。');
+      return;
+    }
+
+    // 初始化 ParticleNetwork（參數請用你的 projectId / clientKey / appId）
+    particle = new ParticleNetwork({
+      projectId: '2ca21ebc-dcca-4561-a2c5-bc9d3186f6fc',
+      clientKey: 'cr6hWHl0ZSi5QErNDelpSpuTYKORNDEouybUDEuE',
+      appId: '8ec2b7f4-18b7-435c-a703-c7a484959664',
+      // 以下為示範的選項，依需要調整
+      chainId: 1,            // EVM chain id，預設 1（Ethereum mainnet）
+      chainName: 'Ethereum',
+      // wallet: { displayWalletEntry: true } // 若要顯示內建錢包入口
+    });
+
+    log('ParticleNetwork 已初始化 (projectId=' + PARTICLE_PROJECT_ID + ')');
+  })();
+
+  // btn: Facebook login 使用 particle.auth.login 並指定 preferredAuthType: 'facebook'
+  document.getElementById('fb-login').addEventListener('click', async () => {
+    try {
+      if (!particle || !particle.auth) {
+        log('Particle SDK 尚未就緒');
+        return;
+      }
+
+      // 使用 social login — 直接指定 facebook，會跳過選單並導向 Facebook 登入流程
+      const userInfo = await particle.auth.login({
+        preferredAuthType: 'facebook' // 可改為 'google' / 'apple' / 'twitter' 等
+      });
+
+      log('Facebook 登入成功！取得 userInfo:\n' + JSON.stringify(userInfo, null, 2));
+
+      // 若要取得 wallet 地址（EVM）
+      try {
+        const address = await particle.evm.getAddress();
+        log('Particle wallet address: ' + address);
+      } catch (e) {
+        log('取得 wallet address 失敗（可能尚未建立 wallet 或非 EVM），錯誤：' + (e.message || e));
+      }
+
+      // 建立 ParticleProvider (如果需要在前端用 web3 與 chain 互動)
+      if (typeof ParticleProvider !== 'undefined') {
+        particleProvider = new ParticleProvider(particle.auth);
+        web3 = new Web3(particleProvider);
+        log('已建立 ParticleProvider，可用 web3 操作（示範：按「取得 Accounts」）。');
+      } else {
+        log('注意：ParticleProvider 不可用（未載入 provider.min.js），若需 web3 支援請載入該 SDK。');
+      }
+
+    } catch (err) {
+      log('登入失敗或被取消：' + (err.message || JSON.stringify(err)));
+      console.error(err);
+    }
+  });
+
+  // 登出
+  document.getElementById('logout').addEventListener('click', async () => {
+    try {
+      if (!particle || !particle.auth) {
+        log('Particle SDK 尚未就緒');
+        return;
+      }
+      await particle.auth.logout();
+      log('已登出 Particle session');
+      document.getElementById('log').textContent = '已登出';
+    } catch (e) {
+      log('登出失敗：' + (e.message || e));
+    }
+  });
+
+  // 取得 accounts（示範 web3 呼叫）
+  document.getElementById('get-accounts').addEventListener('click', async () => {
+    if (!web3) {
+      log('尚未初始化 web3 (ParticleProvider)。請先登入並確保 provider.min.js 已載入。');
+      return;
+    }
+    try {
+      const accounts = await web3.eth.getAccounts();
+      log('web3 accounts: ' + JSON.stringify(accounts));
+    } catch (e) {
+      log('取得 accounts 發生錯誤：' + (e.message || e));
+    }
+  });
+
+</script>
+</body>
+</html>
