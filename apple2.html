@@ -52,7 +52,7 @@
   // 這裡填你自己的值（一定要先在 Apple Developer 後台設定好）
   const CLIENT_ID     = "com.luckyi.luckyiServices";          // ← 改成你的 Services ID
   const REDIRECT_URI  = "https://https://www.w3schools.com/callback";        // ← 必須是 https 且已註冊
-  const SCOPE         = "luckyi.php@gmail.com";                             // 要 email + 姓名
+  const SCOPE         = "email name";                             // 要 email + 姓名
   const STATE         = "apple-test-" + Math.random().toString(36).slice(2); // 防 CSRF
   // 初始化
   AppleID.auth.init({
