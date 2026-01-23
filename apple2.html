@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign in with Apple 測試頁面</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f5f5f7;
+    }
+    .container {
+      text-align: center;
+      padding: 40px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-bottom: 2rem;
+      color: #1d1d1f;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>測試 Sign in with Apple</h1>
+
+  <!-- 這就是官方推薦的按鈕容器 -->
+  <div
+          id="appleid-signin"
+          data-color="black"       <!-- black / white -->
+  data-border="true"       <!-- 是否有邊框 -->
+  data-type="sign in"      <!-- sign in / sign up / continue_with -->
+  data-height="50"         <!-- 高度 px -->
+  ></div>
+
+<!-- 顯示登入結果的地方（可選） -->
+<pre id="result" style="margin-top: 2rem; text-align: left; max-width: 500px; background:#f0f0f0; padding:1rem; border-radius:8px;"></pre>
+</div>
+
+<!-- 載入 Apple 官方 JS SDK -->
+<script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+
+<script>
+  // 這裡填你自己的值（一定要先在 Apple Developer 後台設定好）
+  const CLIENT_ID     = "com.luckyi.luckyiServices";          // ← 改成你的 Services ID
+  const REDIRECT_URI  = "https://https://www.w3schools.com/callback";        // ← 必須是 https 且已註冊
+  const SCOPE         = "luckyi.php@gmail.com";                             // 要 email + 姓名
+  const STATE         = "apple-test-" + Math.random().toString(36).slice(2); // 防 CSRF
+  // 初始化
+  AppleID.auth.init({
+    clientId:     CLIENT_ID,
+    scope:        SCOPE,
+    redirectURI:  REDIRECT_URI,
+    state:        STATE,
+    usePopup:     true          // 如果想用彈窗而非跳轉，開啟這個（推薦）
+    // 如果不要彈窗，就把 usePopup 拿掉，會直接跳轉
+  });
+
+  // 監聽按鈕點擊（也可以直接用 div 自動綁定）
+  document.getElementById('appleid-signin').addEventListener('click', () => {
+    AppleID.auth.signIn()
+            .then(response => {
+              // 成功會得到授權 code（如果是 popup 模式）
+              // 如果是 redirect 模式，這裡不會執行，會直接跳頁面
+              document.getElementById('result').textContent =
+                      JSON.stringify(response, null, 2);
+              console.log("授權成功：", response);
+            })
+            .catch(error => {
+              document.getElementById('result').textContent =
+                      "錯誤：" + error.message + "\n" + JSON.stringify(error, null, 2);
+              console.error(error);
+            });
+  });
+
+  // 如果你用 redirect 模式，可以在 callback 頁面這樣取資料
+  // （但這個範例是 popup 模式為主）
+</script>
+
+</body>
+</html>
