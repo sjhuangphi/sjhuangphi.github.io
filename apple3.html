@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign in with Apple REST API 範例</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; background:#f0f2f5; }
+    .btn-apple {
+      background: #000;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s;
+    }
+    .btn-apple:hover { background: #111; }
+    .btn-apple svg { width: 24px; height: 24px; fill: white; }
+  </style>
+</head>
+<body>
+
+<div style="text-align:center;">
+  <h1>使用 Apple 帳號登入（REST API 方式）</h1>
+  <p>點擊後會跳轉到 Apple 授權頁面</p>
+
+  <button class="btn-apple" onclick="signInWithApple()">
+    <svg viewBox="0 0 24 24"><path d="M12.5 2c-1.1 0-2.8.6-3.7 1.6-.9 1-1.3 2.4-1.3 3.8 0 1.4.4 2.8 1.3 3.8.9 1 2.6 1.6 3.7 1.6s2.8-.6 3.7-1.6c.9-1 .4-2.4.4-3.8 0-1.4-.4-2.8-1.3-3.8C15.3 2.6 13.6 2 12.5 2zm0 1.5c.9 0 2.3.5 3 1.2.7.7 1.1 1.8 1.1 3 0 1.2-.4 2.3-1.1 3-.7.7-2.1 1.2-3 1.2s-2.3-.5-3-1.2c-.7-.7-1.1-1.8-1.1-3 0-1.2.4-2.3 1.1-3 .7-.7 2.1-1.2 3-1.2zM8 14.5c-2.2 0-4 1.8-4 4s1.8 4 4 4h8c2.2 0 4-1.8 4-4s-1.8-4-4-4H8z"/></svg>
+    使用 Apple 登入
+  </button>
+
+  <div id="result" style="margin-top:40px; max-width:600px; margin-left:auto; margin-right:auto;"></div>
+</div>
+
+<script>
+  function signInWithApple() {
+    const clientId = 'com.luckyi.luckyiServices';          // 你的 Service ID
+    const redirectURI = 'https://luckyi-19aa8.firebaseapp.com/__/auth/handler';  // 必須與後台設定一致
+    const state = 'appstate-' + Math.random().toString(36).substring(2); // 防 CSRF
+    const scope = 'name email';
+
+    const url = new URL('https://appleid.apple.com/auth/authorize');
+    url.searchParams.append('client_id', clientId);
+    url.searchParams.append('redirect_uri', redirectURI);
+    url.searchParams.append('response_type', 'code id_token'); // 建議兩者都要
+    url.searchParams.append('scope', scope);
+    url.searchParams.append('response_mode', 'form_post');     // 或 fragment
+    url.searchParams.append('state', state);
+
+    // 儲存 state 做驗證用（可存 localStorage 或 cookie）
+    localStorage.setItem('apple_login_state', state);
+
+    window.location.href = url.toString();
+  }
+
+  // 如果你使用 response_mode=form_post，Apple 會 POST 到你的 redirect_uri
+  // 你的後端就要處理 POST 請求，拿到 code / id_token 再去換 token 或驗證
+</script>
+
+</body>
+</html>

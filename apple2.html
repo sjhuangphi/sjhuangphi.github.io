@@ -66,13 +66,23 @@
 
   // 監聽按鈕點擊（也可以直接用 div 自動綁定）
   document.getElementById('appleid-signin').addEventListener('click', () => {
+    console.log("=== Apple 登入成功 1===");
+
     AppleID.auth.signIn()
             .then(response => {
-              // 成功會得到授權 code（如果是 popup 模式）
-              // 如果是 redirect 模式，這裡不會執行，會直接跳頁面
-              document.getElementById('result').textContent =
-                      JSON.stringify(response, null, 2);
-              console.log("授權成功：", response);
+              console.log("=== Apple 登入成功 ===");
+              console.log("Authorization Code:", response.authorization.code);
+              console.log("ID Token:", response.authorization.id_token);
+              console.log("State:", response.authorization.state);
+              if (response.user) {
+                console.log("User Email:", response.user.email);
+                console.log("User Name:", response.user.name?.firstName, response.user.name?.lastName);
+              } else {
+                console.log("這是後續登入，沒有 user 資訊（email/name 只給第一次）");
+              }
+              console.log("完整 response:", response);
+
+              document.getElementById('result').textContent = JSON.stringify(response, null, 2);
             })
             .catch(error => {
               document.getElementById('result').textContent =
