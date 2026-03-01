@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>關於我 | SJ Huang</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #6c63ff;
+      --primary-dark: #574fd6;
+      --secondary: #ff6584;
+      --bg: #0f0f1a;
+      --bg-card: #1a1a2e;
+      --bg-card-hover: #22223b;
+      --text: #e0e0f0;
+      --text-muted: #9090b0;
+      --border: #2e2e4e;
+      --gradient: linear-gradient(135deg, #6c63ff, #ff6584);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(15, 15, 26, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* CSS-only background decoration */
+    #hero::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(108, 99, 255, 0.15), transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 101, 132, 0.12), transparent 70%);
+      top: 20%;
+      right: 15%;
+      pointer-events: none;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #fff;
+      position: relative;
+    }
+
+    .avatar::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: var(--gradient);
+      z-index: -1;
+      opacity: 0.4;
+      filter: blur(8px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .gradient-text {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .hero-desc {
+      max-width: 540px;
+      margin: 0 auto 2rem;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      border-radius: 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* ── Section common ── */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-line {
+      width: 50px;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--gradient);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── About ── */
+    #about {
+      background: var(--bg-card);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .info-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .info-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(108, 99, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Skills ── */
+    #skills {
+      background: var(--bg);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-category {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .skill-category:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+    }
+
+    .skill-category h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      padding: 0.3rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      background: rgba(108, 99, 255, 0.12);
+      color: var(--text);
+      border: 1px solid rgba(108, 99, 255, 0.25);
+    }
+
+    /* Skill bar */
+    .skill-bar-item {
+      margin-bottom: 1rem;
+    }
+
+    .skill-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .skill-bar-track {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.07);
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--gradient);
+    }
+
+    /* ── Experience ── */
+    #experience {
+      background: var(--bg-card);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 2.5rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -2.4rem;
+      top: 0.3rem;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gradient);
+      border: 2px solid var(--bg-card);
+    }
+
+    .timeline-date {
+      font-size: 0.8rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .timeline-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-company {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── Projects ── */
+    #projects {
+      background: var(--bg);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .project-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+    }
+
+    .project-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .project-link {
+      font-size: 0.8rem;
+      color: var(--primary);
+      text-decoration: none;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 2rem;
+      transition: background 0.2s;
+    }
+
+    .project-link:hover {
+      background: rgba(108,99,255,0.15);
+    }
+
+    /* ── Contact ── */
+    #contact {
+      background: var(--bg-card);
+      text-align: center;
+    }
+
+    #contact .section-line {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #contact > .container > p {
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .contact-grid {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.5rem 2rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.3s, transform 0.3s;
+      min-width: 130px;
+    }
+
+    .contact-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+    }
+
+    .contact-item span:first-child {
+      font-size: 1.8rem;
+    }
+
+    .contact-item span:last-child {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      nav ul {
+        display: none;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">SJ Huang</div>
+    <ul>
+      <li><a href="#about">關於我</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#experience">經歷</a></li>
+      <li><a href="#projects">專案</a></li>
+      <li><a href="#contact">聯絡</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="avatar">SJ</div>
+      <h1>Hi, 我是 <span class="gradient-text">SJ Huang</span></h1>
+      <p class="hero-subtitle">全端工程師 · 開源愛好者</p>
+      <p class="hero-desc">熱愛打造優雅的產品，擅長前後端開發，致力於用技術解決真實世界的問題。</p>
+      <div class="btn-group">
+        <a href="#projects" class="btn btn-primary">查看專案</a>
+        <a href="#contact" class="btn btn-outline">聯絡我</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">關於我</h2>
+      <div class="section-line"></div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>我是一名熱愛技術的全端工程師，擁有豐富的 Web 應用開發經驗。從使用者介面設計到後端架構，我都能獨立完成並交付高品質的產品。</p>
+          <p>在工作之餘，我喜歡鑽研新技術、貢獻開源專案，並分享技術知識。我相信好的程式碼應該像好的文章一樣，清晰易讀且富有邏輯。</p>
+          <p>目前積極尋找能夠發揮創意、並與優秀團隊共同成長的機會。</p>
+        </div>
+        <div>
+          <ul class="info-list">
+            <li>
+              <div class="info-icon">📍</div>
+              <span>台灣 · 台北市</span>
+            </li>
+            <li>
+              <div class="info-icon">🎓</div>
+              <span>資訊工程學系</span>
+            </li>
+            <li>
+              <div class="info-icon">💼</div>
+              <span>3+ 年全端開發經驗</span>
+            </li>
+            <li>
+              <div class="info-icon">🌐</div>
+              <span>中文 · 英文</span>
+            </li>
+            <li>
+              <div class="info-icon">✉️</div>
+              <span>sjhuangphi@github.io</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-title">技能</h2>
+      <div class="section-line"></div>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>前端</h3>
+          <div class="skill-tags">
+            <span class="tag">HTML / CSS</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">React</span>
+            <span class="tag">Vue.js</span>
+            <span class="tag">Tailwind CSS</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>後端</h3>
+          <div class="skill-tags">
+            <span class="tag">Node.js</span>
+            <span class="tag">Python</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">Express</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Redis</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>工具 & 平台</h3>
+          <div class="skill-tags">
+            <span class="tag">Git / GitHub</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Linux</span>
+            <span class="tag">GitHub Actions</span>
+            <span class="tag">Nginx</span>
+          </div>
+        </div>
+        <div class="skill-category" style="grid-column: span 1;">
+          <h3>熟練度</h3>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header"><span>Frontend</span><span>90%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header"><span>Backend</span><span>80%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" style="width:80%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header"><span>DevOps</span><span>65%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <div class="container">
+      <h2 class="section-title">工作經歷</h2>
+      <div class="section-line"></div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2024 — 現在</div>
+          <div class="timeline-title">資深全端工程師</div>
+          <div class="timeline-company">某科技新創公司</div>
+          <div class="timeline-desc">負責核心產品前後端開發，主導微服務架構遷移，提升系統效能達 40%。帶領 3 人小組推行 CI/CD 流程，縮短部署時間 60%。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2022 — 2024</div>
+          <div class="timeline-title">前端工程師</div>
+          <div class="timeline-company">互聯網公司</div>
+          <div class="timeline-desc">開發高流量 B2C 電商平台，優化 Core Web Vitals 使 LCP 降低至 1.5s。使用 React + TypeScript 建立可複用元件庫，提升團隊開發效率。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2021 — 2022</div>
+          <div class="timeline-title">軟體工程實習生</div>
+          <div class="timeline-company">軟體服務公司</div>
+          <div class="timeline-desc">參與 SaaS 管理平台開發，負責 REST API 設計與串接，並撰寫單元測試確保程式碼品質。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-title">個人專案</h2>
+      <div class="section-line"></div>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-icon">🚀</div>
+          <h3>DevLog</h3>
+          <p>基於 Next.js 的技術部落格平台，支援 MDX、語法高亮、標籤分類及 RSS 訂閱。</p>
+          <div class="skill-tags" style="margin-bottom:1rem">
+            <span class="tag">Next.js</span>
+            <span class="tag">MDX</span>
+            <span class="tag">Tailwind</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">GitHub</a>
+            <a href="#" class="project-link">Demo</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">📊</div>
+          <h3>StockWatch</h3>
+          <p>即時股票監控 Dashboard，整合多個數據源，支援技術指標分析與自訂警示。</p>
+          <div class="skill-tags" style="margin-bottom:1rem">
+            <span class="tag">Vue.js</span>
+            <span class="tag">Python</span>
+            <span class="tag">WebSocket</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">GitHub</a>
+            <a href="#" class="project-link">Demo</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🔐</div>
+          <h3>AuthKit</h3>
+          <p>輕量級 OAuth 2.0 認證中介層，支援多 Provider，提供統一的 JWT 管理介面。</p>
+          <div class="skill-tags" style="margin-bottom:1rem">
+            <span class="tag">Node.js</span>
+            <span class="tag">JWT</span>
+            <span class="tag">OAuth2</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">聯絡我</h2>
+      <div class="section-line"></div>
+      <p>有任何合作想法或問題歡迎與我聯繫，我會盡快回覆！</p>
+      <div class="contact-grid">
+        <a href="mailto:sjhuangphi@example.com" class="contact-item">
+          <span>✉️</span>
+          <span>Email</span>
+        </a>
+        <a href="https://github.com/sjhuangphi" class="contact-item">
+          <span>🐙</span>
+          <span>GitHub</span>
+        </a>
+        <a href="#" class="contact-item">
+          <span>💼</span>
+          <span>LinkedIn</span>
+        </a>
+        <a href="#" class="contact-item">
+          <span>🐦</span>
+          <span>Twitter/X</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 SJ Huang · Designed &amp; Built with ❤️ using pure CSS</p>
+  </footer>
+
+</body>
+</html>
